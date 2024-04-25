@@ -13,4 +13,7 @@ public class DataConstants {
   public static final String PERIOD_6_DAY = "шестеро суток";
   public static final String PERIOD_7_DAY = "семеро суток";
 
+  public static final String[] PERIOD_NAMES = new String[]{"сутки", "двое суток", "трое суток", "четверо суток",  "пятеро суток",  "шестеро суток",  "семеро суток"};
+  public static final String[] COLOR_NAMES = new String[]{"black", "grey"};
+
 }

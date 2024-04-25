@@ -39,6 +39,10 @@ public class OrderClientDataPage {
     fillDropdown();
   }
 
+  public boolean isOrderStartPage() {
+    return driver.findElement(addressInputLocator).isDisplayed();
+  }
+
   public void setElementForAddress(int codeElement, String nameElement) {
     this.metroStationRowLocator = By.xpath("//button[@value='" + codeElement + "'][./div[text()='" + nameElement + "']]");
   }

@@ -27,8 +27,11 @@ public class GeneralElementTest {
   @Test
   public void checkStartOrderFromMainPage(){
     OrderClientDataPage orderClientDataPage = new OrderClientDataPage(webDriver);
-    new MainPage(webDriver)
-      .clickOrderButton(orderClientDataPage.getOrderHeaderTextLocator());}
+    MainPage mainPage = new MainPage(webDriver);
+    mainPage.clickOrderButton(orderClientDataPage.getOrderHeaderTextLocator());
+    boolean result = orderClientDataPage.isOrderStartPage();
+    assertTrue("Page is not correct", result);
+  }
 
 
   //переход по кнопке Заказать в шапке
@@ -37,6 +40,8 @@ public class GeneralElementTest {
     OrderClientDataPage orderClientDataPage = new OrderClientDataPage(webDriver);
     new HeaderPage(webDriver)
       .clickOrderButton(orderClientDataPage.getOrderHeaderTextLocator());
+    boolean result = orderClientDataPage.isOrderStartPage();
+    assertTrue("Page is not correct", result);
   }
 
   // Проверить: если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката».

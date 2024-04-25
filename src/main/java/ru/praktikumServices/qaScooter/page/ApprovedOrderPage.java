@@ -7,6 +7,7 @@ public class ApprovedOrderPage {
 
   private WebDriver driver;
   private By approvedOrderHeaderLocator = By.xpath(".//div[text() = 'Заказ оформлен']");
+  private By checkOrderStatusButtonLocator = By.xpath(".//button[text() = 'Посмотреть статус']");
 
 
   public ApprovedOrderPage(WebDriver driver) {
@@ -15,6 +16,10 @@ public class ApprovedOrderPage {
 
   public By getApprovedOrderHeaderLocator() {
     return approvedOrderHeaderLocator;
+  }
+
+  public boolean isApprovedOrderPage(){
+    return driver.findElement(checkOrderStatusButtonLocator).isDisplayed();
   }
 
 }

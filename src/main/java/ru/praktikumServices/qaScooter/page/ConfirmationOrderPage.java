@@ -31,4 +31,5 @@ public class ConfirmationOrderPage {
   public By getConfirmationHeaderLocator() {
     return confirmationHeaderLocator;
   }
+
 }

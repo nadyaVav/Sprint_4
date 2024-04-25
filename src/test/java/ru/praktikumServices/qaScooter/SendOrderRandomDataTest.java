@@ -2,9 +2,13 @@ package ru.praktikumServices.qaScooter;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static ru.praktikumServices.qaScooter.constants.DataConstants.*;
 
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +23,7 @@ import ru.praktikumServices.qaScooter.page.OrderClientDataPage;
 import ru.praktikumServices.qaScooter.page.OrderDeliveryDetailsPage;
 
 @RunWith(Parameterized.class)
-public class SendOrderTest {
+public class SendOrderRandomDataTest {
 
   private WebDriver webDriver;
 
@@ -35,21 +39,21 @@ public class SendOrderTest {
   private final String commentOrder;
   private final boolean isCorrect;
 
-  public SendOrderTest(String name, String lastName, String phoneNumber,
-    String deliveryAddress, String subwayStation, int codeSubwayStation,
-    String deliveryDate, String rentPeriod,
-    String colorOfScooter, String commentOrder,
-    boolean isCorrect) {
-    this.name = name;
-    this.lastName = lastName;
-    this.phoneNumber = phoneNumber;
-    this.deliveryAddress = deliveryAddress;
+  public SendOrderRandomDataTest(String subwayStation, int codeSubwayStation, boolean isCorrect) {
+    Faker faker = new Faker(new Locale("ru"));
+    FakeValuesService fakeValuesService = new FakeValuesService(
+      new Locale("ru"), new RandomService());
+
+    this.name = faker.name().firstName();
+    this.lastName = faker.name().lastName();
+    this.phoneNumber = fakeValuesService.numerify("8##########");
+    this.deliveryAddress = faker.address().streetAddress();
     this.subwayStation = subwayStation;
     this.codeSubwayStation = codeSubwayStation;
-    this.deliveryDate = deliveryDate;
-    this.rentPeriod = rentPeriod;
-    this.colorOfScooter = colorOfScooter;
-    this.commentOrder = commentOrder;
+    this.colorOfScooter = COLOR_NAMES[faker.random().nextInt(COLOR_NAMES.length)];
+    this.rentPeriod = PERIOD_NAMES[faker.random().nextInt(PERIOD_NAMES.length)];
+    this.deliveryDate = faker.date().future(100, TimeUnit.DAYS).toString();
+    this.commentOrder = fakeValuesService.bothify("??? ### ?? ## ");
     this.isCorrect = isCorrect;
   }
 
@@ -57,34 +61,9 @@ public class SendOrderTest {
   public static Object[][] getTestData() {
     // Тестовые данные
     return new Object[][] {
-      /*   {
-        "name", "lastName", "phoneNumber",
-        "deliveryAddress", "subwayStation", "codeSubwayStation",
-        "deliveryDate", "rentPeriod",
-        "colorOfScooter", "commentOrder",
-        "result"
-      } */
-     {
-        "Пупкин", "Мага", "89808563636",
-        "Москва Папанина 15-56", "Арбатская", 78,
-        "01.01.2025", PERIOD_1_DAY,
-        COLOR_BLACK, "Позвонить за 10 минут",
-        true
-      },
-      {
-        "Рюмочкин", "Вафля", "89808563637",
-        "Шоколадная Вафля 18-32", "Бульвар Рокоссовского", 1,
-        "01.05.2024", PERIOD_7_DAY,
-        COLOR_GREY, null,
-        true
-      },
-      {
-        "Шолохов", "Лука", "89808563631",
-        "Шоколадная Вафля 18-32", "Юго-Западная", 19,
-        "23.04.2024", PERIOD_3_DAY,
-        null, null,
-        true
-      }
+      {"Юго-Западная", 19, true},
+      {"Арбатская", 78, true},
+      {"Бульвар Рокоссовского", 1, true}
     };
   }
 
@@ -97,7 +76,7 @@ public class SendOrderTest {
   }
 
   @Test
-  public void sendOrder() {
+  public void sendOrderRandomData() {
     // 1я страница заказа
     OrderClientDataPage orderClientDataPage = new OrderClientDataPage(webDriver);
     // 2я страница заказа
